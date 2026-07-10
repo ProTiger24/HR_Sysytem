@@ -38,3 +38,11 @@ EXPOSE 80
 
 CMD ["apache2-foreground"]
 RUN mkdir -p /var/www/html/uploads/resumes && chmod -R 777 /var/www/html/uploads
+# File Upload Permission
+RUN mkdir -p /var/www/html/uploads/resumes && chmod -R 777 /var/www/html/uploads
+RUN chown -R www-data:www-data /var/www/html/uploads
+
+# PHP Error Logging
+RUN echo "error_log = /var/log/php_errors.log" >> /usr/local/etc/php/conf.d/custom.ini
+RUN echo "log_errors = On" >> /usr/local/etc/php/conf.d/custom.ini
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/custom.ini
