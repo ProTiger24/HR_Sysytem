@@ -46,3 +46,4 @@ RUN chown -R www-data:www-data /var/www/html/uploads
 RUN echo "error_log = /var/log/php_errors.log" >> /usr/local/etc/php/conf.d/custom.ini
 RUN echo "log_errors = On" >> /usr/local/etc/php/conf.d/custom.ini
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/custom.ini
+COPY config/ /var/www/html/config/
