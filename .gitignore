@@ -1,0 +1,38 @@
+# ============================================
+# KormoShathi - .gitignore
+# ============================================
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Config with secrets
+config/ai_config.php
+config/email_config.php
+
+# Vendor (Composer dependencies)
+vendor/
+composer.phar
+composer.lock
+
+# Uploads (User files)
+uploads/
+*.log
+*.tmp
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Build
+*.class
+target/
+build/
