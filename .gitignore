@@ -36,3 +36,6 @@ Thumbs.db
 *.class
 target/
 build/
+.env
+config/ai_config.php
+config/email_config.php
