@@ -29,3 +29,5 @@ uploads/
 vendor/
 # Vendor (Composer dependencies)
 .vscode/
+.env.backup
+database.sql
