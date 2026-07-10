@@ -18,23 +18,23 @@ class Database {
 
     private function loadEnv($path) {
         $env = [];
-        if (!file_exists($path)) {
-            error_log(".env file not found at: " . $path);
-            return $env;
+        if (file_exists($path)) {
+            $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if ($line === '' || $line[0] === '#' || $line[0] === ';') continue;
+                if (strpos($line, '=') === false) continue;
+                list($key, $value) = explode('=', $line, 2);
+                $env[trim($key)] = trim($value);
+            }
         }
-        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($lines as $line) {
-            $line = trim($line);
-            // Skip comments and empty lines
-            if ($line === '' || $line[0] === '#' || $line[0] === ';') {
-                continue;
+        // Render/system environment variables override .env file
+        $keys = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS', 'GROQ_API_KEY', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_HOST', 'SMTP_PORT'];
+        foreach ($keys as $key) {
+            $val = getenv($key);
+            if ($val !== false) {
+                $env[$key] = $val;
             }
-            // Skip lines without '='
-            if (strpos($line, '=') === false) {
-                continue;
-            }
-            list($key, $value) = explode('=', $line, 2);
-            $env[trim($key)] = trim($value);
         }
         return $env;
     }
