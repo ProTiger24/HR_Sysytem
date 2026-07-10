@@ -5,17 +5,15 @@ use PHPMailer\PHPMailer\Exception;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 function sendEmail($to, $subject, $body) {
-    $env = parse_ini_file(__DIR__ . '/../.env');
-    
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host       = $env['SMTP_HOST'] ?? 'smtp.gmail.com';
+        $mail->Host       = getenv('SMTP_HOST') ?? 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = $env['SMTP_USERNAME'] ?? 'your-email@gmail.com';
-        $mail->Password   = $env['SMTP_PASSWORD'] ?? 'your-app-password';
+        $mail->Username   = getenv('SMTP_USERNAME') ?? 'your-email@gmail.com';
+        $mail->Password   = getenv('SMTP_PASSWORD') ?? 'your-app-password';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = $env['SMTP_PORT'] ?? 587;
+        $mail->Port       = getenv('SMTP_PORT') ?? 587;
         
         $mail->setFrom('hr@kormoshathi.com', 'KormoShathi HR');
         $mail->addAddress($to);
