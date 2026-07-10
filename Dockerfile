@@ -37,3 +37,4 @@ RUN echo "post_max_size=20M" >> /usr/local/etc/php/conf.d/custom.ini
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+RUN mkdir -p /var/www/html/uploads/resumes && chmod -R 777 /var/www/html/uploads
