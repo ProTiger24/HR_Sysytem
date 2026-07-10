@@ -1,0 +1,9 @@
+.env
+.git
+.gitignore
+uploads/
+vendor/
+composer.phar
+*.log
+*.tmp
+.DS_Store
