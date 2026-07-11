@@ -64,7 +64,7 @@ $back_link = $is_hr ? 'hr-dashboard.php' : 'employee-dashboard.php';
             <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Information</h5>
         </div>
         <div class="card-body text-center">
-            <?php if(!empty($user['profile_picture']) && file_exists('/opt/lampp/htdocs/kormoshathi/' . $user['profile_picture'])): ?>
+            <?php if(!empty($user['profile_picture']) && file_exists(__DIR__ . '/' . $user['profile_picture'])): ?>
                 <img src="/kormoshathi/<?php echo $user['profile_picture']; ?>" class="profile-img" id="profileImage">
             <?php else: ?>
                 <div class="avatar-placeholder" id="profileImage">
@@ -107,7 +107,7 @@ $back_link = $is_hr ? 'hr-dashboard.php' : 'employee-dashboard.php';
         <div class="card-body">
             <form id="signatureForm" enctype="multipart/form-data">
                 <div class="mb-3 text-center">
-                    <?php if(file_exists('/opt/lampp/htdocs/kormoshathi/uploads/signature.png')): ?>
+                    <?php if(file_exists(__DIR__ . '/uploads/signature.png')): ?>
                         <img src="/kormoshathi/uploads/signature.png" class="signature-preview" alt="Current Signature">
                         <p class="text-muted small mt-1">Current Signature</p>
                     <?php else: ?>
