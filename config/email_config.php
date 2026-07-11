@@ -1,32 +1,48 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require_once __DIR__ . '/../vendor/autoload.php';
-
+// ============================================
+// Email Configuration - Brevo API
+// ============================================
 function sendEmail($to, $subject, $body) {
-    $mail = new PHPMailer(true);
-    try {
-        $mail->isSMTP();
-        $mail->Host       = getenv('SMTP_HOST') ?? 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = getenv('SMTP_USERNAME') ?? 'your-email@gmail.com';
-        $mail->Password   = getenv('SMTP_PASSWORD') ?? 'your-app-password';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = getenv('SMTP_PORT') ?? 587;
-        
-        $mail->setFrom('hr@kormoshathi.com', 'KormoShathi HR');
-        $mail->addAddress($to);
-        
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->AltBody = strip_tags($body);
-        
-        $mail->send();
+    $api_key = getenv('BREVO_API_KEY');
+
+    if (!$api_key) {
+        error_log("❌ BREVO_API_KEY not set in environment");
+        return false;
+    }
+
+    $data = [
+        'sender' => [
+            'name' => 'KormoShathi HR',
+            'email' => 'abdulalim528260@gmail.com'
+        ],
+        'to' => [
+            ['email' => $to]
+        ],
+        'subject' => $subject,
+        'htmlContent' => $body
+    ];
+
+    $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'api-key: ' . $api_key
+    ]);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($httpCode == 201) {
+        error_log("✅ Email sent successfully to: $to");
         return true;
-    } catch (Exception $e) {
-        error_log("Email Error: " . $mail->ErrorInfo);
+    } else {
+        error_log("❌ Brevo Email Error (HTTP $httpCode): $response | cURL: $curlError");
         return false;
     }
 }
