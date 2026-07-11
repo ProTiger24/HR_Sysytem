@@ -66,6 +66,8 @@ $back_link = $is_hr ? 'hr-dashboard.php' : 'employee-dashboard.php';
         <div class="card-body text-center">
             <?php
                 $pic = $user['profile_picture'] ?? '';
+                $is_url = !empty($pic) && (strpos($pic, 'http://') === 0 || strpos($pic, 'https://') === 0);
+                $is_local = !empty($pic) && !$is_url && file_exists(__DIR__ . '/' . $pic);
             ?>
             <?php if($is_url): ?>
                 <img src="<?php echo $pic; ?>" class="profile-img" id="profileImage">
