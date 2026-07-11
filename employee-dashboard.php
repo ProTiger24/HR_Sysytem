@@ -201,8 +201,15 @@ $unread_count = $stmt->fetch(PDO::FETCH_ASSOC)['unread'];
         <div class="row">
             <div class="col-4">
                 <div class="profile-card">
-                    <?php if(isset($_SESSION['profile_picture']) && !empty($_SESSION['profile_picture']) && file_exists('/opt/lampp/htdocs/kormoshathi/' . $_SESSION['profile_picture'])): ?>
-                        <img src="/kormoshathi/<?php echo $_SESSION['profile_picture']; ?>" class="avatar" id="profileImage">
+                    <?php
+                        $pic = $_SESSION['profile_picture'] ?? '';
+                        $is_url = !empty($pic) && (strpos($pic, 'http://') === 0 || strpos($pic, 'https://') === 0);
+                        $is_local = !empty($pic) && !$is_url && file_exists(__DIR__ . '/' . $pic);
+                    ?>
+                    <?php if($is_url): ?>
+                        <img src="<?php echo $pic; ?>" class="avatar" id="profileImage">
+                    <?php elseif($is_local): ?>
+                        <img src="/kormoshathi/<?php echo $pic; ?>" class="avatar" id="profileImage">
                     <?php else: ?>
                         <div class="avatar-placeholder" id="profileImage">
                             <?php echo strtoupper(substr($_SESSION['first_name'], 0, 1) . substr($_SESSION['last_name'], 0, 1)); ?>

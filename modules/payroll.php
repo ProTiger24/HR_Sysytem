@@ -279,18 +279,7 @@ async function viewPayslip(id) {
 
 // Download Payslip
 async function downloadPayslip(id) {
-    try {
-        const response = await fetch(`../api/download-payslip.php?id=${id}`);
-        const result = await response.json();
-        
-        if(result.success && result.url) {
-            window.open(result.url, '_blank');
-        } else {
-            alert('Download failed. Please try again.');
-        }
-    } catch(e) {
-        alert('Error downloading payslip');
-    }
+    window.open(`../api/download-payslip.php?id=${id}`, '_blank');
 }
 
 loadPayroll();

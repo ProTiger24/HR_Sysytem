@@ -1,10 +1,10 @@
 <?php
-header("Content-Type: application/json");
 session_start();
 require_once '../config/database.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'hr') {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    http_response_code(403);
+    echo "Unauthorized";
     exit;
 }
 
@@ -19,11 +19,13 @@ $stmt->execute([$id]);
 $payroll = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$payroll) {
-    echo json_encode(['success' => false, 'message' => 'Payslip not found']);
+    http_response_code(404);
+    echo "Payslip not found";
     exit;
 }
 
-// Generate HTML for payslip
+$filename = 'payslip_' . $payroll['employee_id'] . '_' . date('Ymd') . '.html';
+
 $html = '
 <!DOCTYPE html>
 <html>
@@ -76,9 +78,10 @@ $html = '
 </body>
 </html>';
 
-// Save as PDF (using HTML2PDF or simple HTML)
-$filename = 'payslip_' . $payroll['employee_id'] . '_' . date('Ymd') . '.html';
-file_put_contents('/opt/lampp/htdocs/kormoshathi/uploads/' . $filename, $html);
-
-echo json_encode(['success' => true, 'url' => '/kormoshathi/uploads/' . $filename]);
+// Stream directly to browser as a downloadable file - no disk save needed
+header("Content-Type: text/html; charset=UTF-8");
+header('Content-Disposition: attachment; filename="' . $filename . '"');
+header('Content-Length: ' . strlen($html));
+echo $html;
+exit;
 ?>
