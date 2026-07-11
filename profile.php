@@ -64,8 +64,13 @@ $back_link = $is_hr ? 'hr-dashboard.php' : 'employee-dashboard.php';
             <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Information</h5>
         </div>
         <div class="card-body text-center">
-            <?php if(!empty($user['profile_picture']) && file_exists(__DIR__ . '/' . $user['profile_picture'])): ?>
-                <img src="/kormoshathi/<?php echo $user['profile_picture']; ?>" class="profile-img" id="profileImage">
+            <?php
+                $pic = $user['profile_picture'] ?? '';
+            ?>
+            <?php if($is_url): ?>
+                <img src="<?php echo $pic; ?>" class="profile-img" id="profileImage">
+            <?php elseif($is_local): ?>
+                <img src="/kormoshathi/<?php echo $pic; ?>" class="profile-img" id="profileImage">
             <?php else: ?>
                 <div class="avatar-placeholder" id="profileImage">
                     <?php echo strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1)); ?>
@@ -146,9 +151,9 @@ document.getElementById('profilePicForm').addEventListener('submit', async funct
         if (result.success) {
             const img = document.getElementById('profileImage');
             if (img.tagName === 'IMG') {
-                img.src = '/kormoshathi/' + result.image_path + '?t=' + new Date().getTime();
+                img.src = result.image_path + '?t=' + new Date().getTime();
             } else {
-                img.outerHTML = `<img src="/kormoshathi/${result.image_path}?t=${new Date().getTime()}" class="profile-img" id="profileImage">`;
+                img.outerHTML = `<img src="${result.image_path}?t=${new Date().getTime()}" class="profile-img" id="profileImage">`;
             }
             alert('✅ Profile picture updated successfully!');
         } else {
