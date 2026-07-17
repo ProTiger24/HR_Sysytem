@@ -93,4 +93,4 @@ This project is developed for internal/educational use as part of a CodeAlpha in
 
 **Abdul Alim**
 CSE Student, BUBT | Competitive Programmer
-GitHub: [@ProTiger24](https://github.com/ProTiger24)
+Portfolio - https://abdul-alim-portfolio-sigma.vercel.app/
